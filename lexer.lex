@@ -11,10 +11,10 @@ CONST 		[0-9]
 ID      	[a-zA-Z]{1,8}
   
 %% 
-{CONST}+                		{return CONSTANT;}
-{CONST}+"."{CONST}*			{return CONSTANT;}
-CONST 					{return CONSTANT;}
-ID 					{return IDENTIFIER;}
+{CONST}+                		{yylval.intValue = atoi(yytext); return INT_CONSTANT;}
+{CONST}+"."{CONST}*			{yylval.dblValue = atof(yytext); return DOUBLE_CONSTANT;}
+CONST 					{yylval.intValue = atoi(yytext); return INT_CONSTANT;}
+ID 					{yylval.idValue = yytext; return IDENTIFIER;}
 "main(){"				{return MAIN;}
 "return 0;}"				{return RETURN;}
 int				 	{return INT;}
@@ -38,7 +38,7 @@ cin					{return CIN;}
 \<					{return LT;}
 \<=					{return LE;}
 \;					{return ';';}
-{ID}					{return IDENTIFIER;}
+{ID}					{yylval.idValue = yytext; return IDENTIFIER;}
 [\n]			                {nrLine++;}
 [ \t]+             			/*skip whitespace*/
 .					printf("Something is wrong with\t %s\n", yytext);

@@ -9,9 +9,15 @@
     extern int nrLine;
     void yyerror(const char *s);
 %}
+%union {
+    int intValue;
+    double dblValue;
+    char* idValue;
+}
 
-%token IDENTIFIER
-%token CONSTANT
+%token <idValue> IDENTIFIER
+%token <intValue> INT_CONSTANT
+%token <dblValue> DOUBLE_CONSTANT
 %token MAIN
 %token INT
 %token DOUBLE
@@ -33,7 +39,7 @@
 
 program: start content
 
-start: INT MAIN
+start: INT MAIN {printf("start:\n");}
 
 content: declarareParam lista_instr final
 
@@ -43,21 +49,24 @@ instr: atribuire | instr_intrare | instr_iesire
 
 declarareParam: declarare | declarare declarareParam
 
-declarare: tip IDENTIFIER ';'
+declarare: tip IDENTIFIER ';' {printf("declarare:\n");}
 
-tip: INT | DOUBLE
+tip: INT {printf("integer type ");}| DOUBLE {printf("double type ");}
 
-atribuire: IDENTIFIER ASSIGN expresie ';'
+atribuire: IDENTIFIER ASSIGN expresie ';' {printf("atribuire\n");}
 
 expresie: term | expresie '+' term | expresie '-' term | expresie '*' term | expresie '/' term | expresie '%' term
 
-term: CONSTANT | IDENTIFIER 
+term: INT_CONSTANT {printf("integer: %d\n", $1);} | DOUBLE_CONSTANT {printf("double: %f\n",$1);} | IDENTIFIER {printf("identifier: %s\n",$1);}
 
-instr_intrare: CIN GT GT IDENTIFIER ';'
+instr_intrare: CIN GT GT IDENTIFIER ';' {
+	     printf("intrare\n");
+		printf("chestie\n");
+}
 
-instr_iesire: COUT LT LT IDENTIFIER ';'
+instr_iesire: COUT LT LT IDENTIFIER ';' {printf("iesire\n");}
 
-final: RETURN
+final: RETURN {printf("end\n");}
 
 %%
 void yyerror(const char *s) {
