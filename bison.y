@@ -13,12 +13,6 @@
 %token IDENTIFIER
 %token CONSTANT
 %token MAIN
-%token IF
-%token DACA
-%token ATUNCI
-%token SFDACA
-%token ELSE
-%token WHILE
 %token INT
 %token DOUBLE
 %token CIN
@@ -37,13 +31,15 @@
 
 %%     
 
-program: INT MAIN content 
+program: start content
+
+start: INT MAIN
 
 content: declarareParam lista_instr final
 
 lista_instr: instr | instr lista_instr
 
-instr: atribuire | instr_intrare | instr_iesire | instr_if | instr_while
+instr: atribuire | instr_intrare | instr_iesire
 
 declarareParam: declarare | declarare declarareParam
 
@@ -60,16 +56,6 @@ term: CONSTANT | IDENTIFIER
 instr_intrare: CIN GT GT IDENTIFIER ';'
 
 instr_iesire: COUT LT LT IDENTIFIER ';'
-
-instr_if: IF '(' conditie ')' '{' lista_instr '}' | IF '(' conditie ')' '{' lista_instr '}' ELSE '{' lista_instr '}' | instr_daca
-
-instr_daca: DACA '(' IDENTIFIER ')' ATUNCI instr SFDACA
-
-conditie: expresie relatie expresie
-
-relatie: LE | LT | GE | GT | EQ | NEQ
-
-instr_while: WHILE '(' conditie ')' '{' lista_instr '}' 
 
 final: RETURN
 

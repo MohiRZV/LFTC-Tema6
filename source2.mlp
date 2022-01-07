@@ -1,0 +1,13 @@
+int main(){
+    int h;
+    int base;
+    int areatr;
+
+    cin >> h;
+    cin >> base;
+
+    areatr = 3*h*base;
+
+    cout << areatr;
+
+    return 0;}
